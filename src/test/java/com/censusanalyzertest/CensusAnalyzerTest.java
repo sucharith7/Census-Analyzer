@@ -56,6 +56,17 @@ public class CensusAnalyzerTest {
             Assert.assertEquals(CensusException.exceptionType.OTHER_FILE_ERROR,CensusException.exceptionType.OTHER_FILE_ERROR);
         }
     }
+
+    @Test
+    public void givenCSVFile_WhenImproperHeader_ShouldThrowException() {
+        CensusAnalyzer censusAnalyzer = new CensusAnalyzer();
+        int numberOfStates = 0;
+        try {
+            numberOfStates = censusAnalyzer.loadCensusData(CSV_FILE);
+        } catch (CensusException exception) {
+            Assert.assertEquals(CensusException.exceptionType.OTHER_FILE_ERROR,CensusException.exceptionType.OTHER_FILE_ERROR);
+        }
+    }
 }
 
 
