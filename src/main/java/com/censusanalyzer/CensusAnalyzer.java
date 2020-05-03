@@ -29,6 +29,8 @@ public class CensusAnalyzer {
             }
         } catch (NoSuchFileException exception) {
             throw new CensusException(CensusException.exceptionType.CENSUS_FILE_ERROR, "please enter proper file path or file type");
+        }   catch (RuntimeException exception) {
+            throw new CensusException(CensusException.exceptionType.OTHER_FILE_ERROR, "please enter proper delimter  or proper header");
         } catch (IOException exception) {
             exception.printStackTrace();
         }
