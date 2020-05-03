@@ -9,6 +9,7 @@ public class CensusAnalyzerTest {
 
     public final String CSV_FILE = "C:\\Users\\sucha\\IdeaProjects\\CensusAnalyzer\\StateCensusData.csv";
     public final String WRONG_FILE= "C:\\Users\\sucha\\IdeaProjects\\CensusAnalyzer\\StateCensu.csv";
+    public final String WRONG_TYPE = "C:\\Users\\sucha\\IdeaProjects\\CensusAnalyzer\\StateCensusData.txt";
 
     @Test
     public void givenCSVFile_WhenMatchNumberOfRecords_ShouldReturnNumber() {
@@ -28,6 +29,17 @@ public class CensusAnalyzerTest {
         int numberOfStates = 0;
         try {
             numberOfStates = censusAnalyzer.loadCensusData(WRONG_FILE);
+        } catch (CensusException exception) {
+            Assert.assertEquals(CensusException.exceptionType.CENSUS_FILE_ERROR,CensusException.exceptionType.CENSUS_FILE_ERROR);
+        }
+    }
+
+    @Test
+    public void givenCSVFile_WhenNotCorrectType_ShouldThrowException() {
+        CensusAnalyzer censusAnalyzer = new CensusAnalyzer();
+        int numberOfStates = 0;
+        try {
+            numberOfStates = censusAnalyzer.loadCensusData(WRONG_TYPE);
         } catch (CensusException exception) {
             Assert.assertEquals(CensusException.exceptionType.CENSUS_FILE_ERROR,CensusException.exceptionType.CENSUS_FILE_ERROR);
         }
