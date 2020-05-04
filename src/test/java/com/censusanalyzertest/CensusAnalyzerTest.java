@@ -72,8 +72,24 @@ public class CensusAnalyzerTest {
     @Test
     public void givenStateCSVFile_WhenMatchNumberOfRecords_ShouldReturnNumber() {
         CodeAnalyzer codeAnalyzer = new CodeAnalyzer();
-        int count = codeAnalyzer.loadStateData(CSV_STATE);
+        int count = 0;
+        try {
+            count = codeAnalyzer.loadStateData(CSV_STATE);
+        } catch (CensusException exception) {
+            exception.printStackTrace();
+        }
         Assert.assertEquals(37,count);
+    }
+
+    @Test
+    public void givenStateCSVFile_WhenDoesNotExist_ShouldThrowException() {
+        CodeAnalyzer codeAnalyzer = new CodeAnalyzer();
+        int count = 0;
+        try {
+            count = codeAnalyzer.loadStateData(WRONG_FILE);
+        } catch (CensusException exception) {
+            Assert.assertEquals(CensusException.exceptionType.CENSUS_FILE_ERROR,CensusException.exceptionType.CENSUS_FILE_ERROR);
+        }
     }
 }
 
