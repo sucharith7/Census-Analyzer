@@ -2,6 +2,7 @@ package com.censusanalyzertest;
 
 import com.censusanalyzer.CensusAnalyzer;
 import com.censusexception.CensusException;
+import com.codeanalyzer.CodeAnalyzer;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,7 +12,7 @@ public class CensusAnalyzerTest {
     public final String WRONG_FILE= "C:\\Users\\sucha\\IdeaProjects\\CensusAnalyzer\\StateCensu.csv";
     public final String WRONG_TYPE = "C:\\Users\\sucha\\IdeaProjects\\CensusAnalyzer\\StateCensusData.txt";
     public final String DATA_FILE= "C:\\Users\\sucha\\IdeaProjects\\CensusAnalyzer\\statecensus.csv";
-
+    public final String CSV_STATE = "C:\\Users\\sucha\\IdeaProjects\\CensusAnalyzer\\StateCode.csv";
     @Test
     public void givenCSVFile_WhenMatchNumberOfRecords_ShouldReturnNumber() {
         CensusAnalyzer censusAnalyzer = new CensusAnalyzer();
@@ -66,6 +67,13 @@ public class CensusAnalyzerTest {
         } catch (CensusException exception) {
             Assert.assertEquals(CensusException.exceptionType.OTHER_FILE_ERROR,CensusException.exceptionType.OTHER_FILE_ERROR);
         }
+    }
+   // 2.1
+    @Test
+    public void givenStateCSVFile_WhenMatchNumberOfRecords_ShouldReturnNumber() {
+        CodeAnalyzer codeAnalyzer = new CodeAnalyzer();
+        int count = codeAnalyzer.loadStateData(CSV_STATE);
+        Assert.assertEquals(37,count);
     }
 }
 
