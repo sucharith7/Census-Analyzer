@@ -102,6 +102,17 @@ public class CensusAnalyzerTest {
             Assert.assertEquals(CensusException.exceptionType.CENSUS_FILE_ERROR,CensusException.exceptionType.CENSUS_FILE_ERROR);
         }
     }
+
+    @Test
+    public void givenStateCSVFile_WhenDelimeterIsWrong_ShouldThrowException() {
+        CodeAnalyzer codeAnalyzer = new CodeAnalyzer();
+        int count = 0;
+        try {
+            count = codeAnalyzer.loadStateData(DATA_FILE);
+        } catch (CensusException exception) {
+            Assert.assertEquals(CensusException.exceptionType.CENSUS_FILE_ERROR,CensusException.exceptionType.CENSUS_FILE_ERROR);
+        }
+    }
 }
 
 
