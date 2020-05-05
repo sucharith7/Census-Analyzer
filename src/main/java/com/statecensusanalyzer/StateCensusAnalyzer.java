@@ -4,6 +4,7 @@ import com.censusdata.CensusData;
 import com.censusexception.CensusException;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
+import com.opencsvbuilder.OpenCSVBuilder;
 import com.statecensus.StateCensus;
 
 import java.io.IOException;
@@ -21,6 +22,7 @@ public class StateCensusAnalyzer {
         try {
             Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
             csvUserIterator = this.getCSVFileIterator(reader, StateCensus.class);
+            csvUserIterator = new OpenCSVBuilder().getCSVFileIterator(reader, StateCensus.class);
             while (csvUserIterator.hasNext()) {
                 count++;
                 csvUserIterator.next();
@@ -41,6 +43,7 @@ public class StateCensusAnalyzer {
         try {
             Reader reader = Files.newBufferedReader(Paths.get(csvFileState));
             csvUserIterator = this.getCSVFileIterator(reader, CensusData.class);
+            csvUserIterator = new OpenCSVBuilder().getCSVFileIterator(reader, CensusData.class);
             while (csvUserIterator.hasNext()) {
                 count++;
                 csvUserIterator.next();
