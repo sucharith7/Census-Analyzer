@@ -1,10 +1,11 @@
 package com.statecensusanalyzer;
 
+import com.census.ICSVBuilder;
 import com.censusdata.CensusData;
 import com.censusexception.CensusException;
+import com.csvbuilderfactory.CSVBuilderFactory;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
-import com.opencsvbuilder.OpenCSVBuilder;
 import com.statecensus.StateCensus;
 
 import java.io.IOException;
@@ -21,13 +22,9 @@ public class StateCensusAnalyzer {
         Iterator<StateCensus> csvUserIterator = null;
         try {
             Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
-            csvUserIterator = this.getCSVFileIterator(reader, StateCensus.class);
-            csvUserIterator = new OpenCSVBuilder().getCSVFileIterator(reader, StateCensus.class);
-            while (csvUserIterator.hasNext()) {
-                count++;
-                csvUserIterator.next();
-            }
-            csvUserIterator = this.getCSVFileIterator(reader, StateCensus.class);
+            ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
+            Iterator<StateCensus> censusIterator = csvBuilder.getCSVFileIterator(reader, StateCensus.class);
+            return this.getCount(censusIterator);
         } catch (NoSuchFileException exception) {
             throw new CensusException(CensusException.exceptionType.CENSUS_FILE_ERROR, "please enter proper file path or file type");
         } catch (RuntimeException exception) {
@@ -35,20 +32,17 @@ public class StateCensusAnalyzer {
         } catch (IOException exception) {
             exception.printStackTrace();
         }
-        return getCount(csvUserIterator);
+        return count;
     }
+
 
     public int loadStateData(String csvFileState) throws CensusException {
         Iterator<StateCensus> csvUserIterator = null;
         try {
             Reader reader = Files.newBufferedReader(Paths.get(csvFileState));
-            csvUserIterator = this.getCSVFileIterator(reader, CensusData.class);
-            csvUserIterator = new OpenCSVBuilder().getCSVFileIterator(reader, CensusData.class);
-            while (csvUserIterator.hasNext()) {
-                count++;
-                csvUserIterator.next();
-            }
-            csvUserIterator = this.getCSVFileIterator(reader, CensusData.class);
+            ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
+            Iterator<CensusData> censusIterator = csvBuilder.getCSVFileIterator(reader, CensusData.class);
+            return this.getCount(censusIterator);
         } catch (NoSuchFileException exception) {
             throw new CensusException(CensusException.exceptionType.CENSUS_FILE_ERROR, "please enter proper file path or file type");
         } catch (RuntimeException exception) {
