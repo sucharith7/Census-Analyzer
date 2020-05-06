@@ -9,7 +9,7 @@ import java.io.Reader;
 import java.util.Iterator;
 
 public class OpenCSVBuilder <E> implements ICSVBuilder {
-    public <E> Iterator<E> getCSVFileIterator(Reader reader, Class csvClass) throws CensusException {
+    public <E> Iterator<E> getCSVFileIterator(Reader reader, Class csvClass) throws CSVBuilderException {
         try {
             CsvToBean<E> csvToBean = new CsvToBeanBuilder(reader)
                     .withType(csvClass)
@@ -17,7 +17,7 @@ public class OpenCSVBuilder <E> implements ICSVBuilder {
                     .build();
             return csvToBean.iterator();
         } catch (RuntimeException exception) {
-            throw new CensusException(CensusException.exceptionType.OTHER_FILE_ERROR, "please enter proper delimter  or proper header");
+            throw new CSVBuilderException("please enter proper delimeter or proper header",CensusException.exceptionType.OTHER_FILE_ERROR);
         }
     }
 }
