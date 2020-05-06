@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.Iterator;
+import java.util.List;
 
 public class StateCensusAnalyzer {
     int count;
@@ -25,8 +26,8 @@ public class StateCensusAnalyzer {
         try {
             Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
             ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
-            Iterator<StateCensus> censusIterator = csvBuilder.getCSVFileIterator(reader, StateCensus.class);
-            return this.getCount(censusIterator);
+            List<StateCensus> csvFileList = csvBuilder.getCSVFileList(reader, StateCensus.class);
+            return csvFileList.size();
         } catch (NoSuchFileException exception) {
             throw new CensusException(CensusException.exceptionType.CENSUS_FILE_ERROR, "please enter proper file path or file type");
         } catch (RuntimeException exception) {
@@ -45,8 +46,8 @@ public class StateCensusAnalyzer {
         try {
             Reader reader = Files.newBufferedReader(Paths.get(csvFileState));
             ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
-            Iterator<CensusData> censusIterator = csvBuilder.getCSVFileIterator(reader, CensusData.class);
-            return this.getCount(censusIterator);
+            List<CensusData> csvFileList = csvBuilder.getCSVFileList(reader, CensusData.class);
+            return csvFileList.size();
         } catch (NoSuchFileException exception) {
             throw new CensusException(exceptionType.CENSUS_FILE_ERROR, "please enter proper file path or file type");
         } catch (RuntimeException exception) {
