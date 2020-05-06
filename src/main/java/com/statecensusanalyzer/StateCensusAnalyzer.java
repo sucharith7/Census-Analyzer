@@ -3,9 +3,11 @@ package com.statecensusanalyzer;
 import com.census.ICSVBuilder;
 import com.censusdata.CensusData;
 import com.censusexception.CensusException;
+import com.censusexception.CensusException.exceptionType;
 import com.csvbuilderfactory.CSVBuilderFactory;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
+import com.opencsvbuilder.CSVBuilderException;
 import com.statecensus.StateCensus;
 
 import java.io.IOException;
@@ -31,6 +33,8 @@ public class StateCensusAnalyzer {
             throw new CensusException(CensusException.exceptionType.OTHER_FILE_ERROR, "please enter proper delimter  or proper header");
         } catch (IOException exception) {
             exception.printStackTrace();
+        } catch (CSVBuilderException exception) {
+            exception.printStackTrace();
         }
         return count;
     }
@@ -44,13 +48,15 @@ public class StateCensusAnalyzer {
             Iterator<CensusData> censusIterator = csvBuilder.getCSVFileIterator(reader, CensusData.class);
             return this.getCount(censusIterator);
         } catch (NoSuchFileException exception) {
-            throw new CensusException(CensusException.exceptionType.CENSUS_FILE_ERROR, "please enter proper file path or file type");
+            throw new CensusException(exceptionType.CENSUS_FILE_ERROR, "please enter proper file path or file type");
         } catch (RuntimeException exception) {
-            throw new CensusException(CensusException.exceptionType.OTHER_FILE_ERROR, "please enter proper delimter  or proper header");
+            throw new CensusException(exceptionType.OTHER_FILE_ERROR, "please enter proper delimeter or proper header");
         } catch (IOException exception) {
             exception.printStackTrace();
+        } catch (CSVBuilderException exception) {
+            exception.printStackTrace();
         }
-        return getCount(csvUserIterator);
+        return count;
     }
 
     private <E> int getCount(Iterator<E> csvUserIterator) {
@@ -70,7 +76,7 @@ public class StateCensusAnalyzer {
                     .build();
             return csvToBean.iterator();
         } catch (RuntimeException exception) {
-            throw new CensusException(CensusException.exceptionType.OTHER_FILE_ERROR, "please enter proper delimter  or proper header");
+            throw new CensusException(exceptionType.OTHER_FILE_ERROR, "please enter proper delimter  or proper header");
         }
     }
 }
