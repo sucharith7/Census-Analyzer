@@ -5,8 +5,6 @@ import com.censusdata.CensusData;
 import com.censusexception.CensusException;
 import com.censusexception.CensusException.exceptionType;
 import com.csvbuilderfactory.CSVBuilderFactory;
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsvbuilder.CSVBuilderException;
 import com.statecensus.StateCensus;
 
@@ -67,18 +65,6 @@ public class StateCensusAnalyzer {
             csvUserIterator.next();
         }
         return count;
-    }
-
-    private <E> Iterator<E> getCSVFileIterator(Reader reader, Class csvClass) throws CensusException {
-        try {
-            CsvToBean<E> csvToBean = new CsvToBeanBuilder(reader)
-                    .withType(csvClass)
-                    .withIgnoreLeadingWhiteSpace(true)
-                    .build();
-            return csvToBean.iterator();
-        } catch (RuntimeException exception) {
-            throw new CensusException(exceptionType.OTHER_FILE_ERROR, "please enter proper delimter  or proper header");
-        }
     }
 }
 
