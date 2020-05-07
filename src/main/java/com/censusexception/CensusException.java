@@ -8,7 +8,7 @@ public class CensusException extends Exception{
     }
 
     public enum exceptionType{
-        CENSUS_FILE_ERROR,OTHER_FILE_ERROR;
+        CENSUS_FILE_ERROR,OTHER_FILE_ERROR,NO_CENSUS_DATA;
     }
 
     public exceptionType type;
