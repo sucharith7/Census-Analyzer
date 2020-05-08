@@ -20,6 +20,7 @@ import java.util.List;
 public class StateCensusAnalyzer {
 
     List<StateCensus> csvFileList = null;
+    List<CensusData> csvStateList = null;
 
     public int loadCensusData(String csvFilePath) throws CensusException {
 
@@ -64,20 +65,30 @@ public class StateCensusAnalyzer {
         if (csvFileList == null || csvFileList.size() == 0){
             throw new CensusException(exceptionType.NO_CENSUS_DATA, "No Census Data");
         }
-        Comparator<StateCensus> censusComparator = Comparator.comparing(census -> census.getStateName());
-        this.sort(censusComparator);
+        Comparator<StateCensus> StateCensusComparator = Comparator.comparing(census -> census.getStateName());
+        this.sort(StateCensusComparator,csvFileList);
         String sortedStateCensusJson = new Gson().toJson(csvFileList);
         return sortedStateCensusJson;
     }
 
-    private void sort(Comparator<StateCensus> censusComparator) {
-        for (int i=0; i< csvFileList.size()-1; i++) {
-            for (int j = 0; j < csvFileList.size() - i - 1; j++) {
-                StateCensus census1 = csvFileList.get(j);
-                StateCensus census2 = csvFileList.get(j+1);
-                if (censusComparator.compare(census1, census2) > 0){
-                    csvFileList.set(j, census2);
-                    csvFileList.set(j+1, census1);
+    public String getStateCodeWiseSortedCensusData() throws CensusException{
+        if (csvStateList == null || csvStateList.size() == 0){
+            throw new CensusException(exceptionType.NO_CENSUS_DATA, "No Census Data");
+        }
+        Comparator<CensusData> CensusDataComparator = Comparator.comparing(census -> census.getStateName());
+        this.sort(CensusDataComparator,csvStateList);
+        String sortedCensusDataJson = new Gson().toJson(csvStateList);
+        return sortedCensusDataJson;
+    }
+
+    private <E> void sort(Comparator<E> censuscomparator,List<E> censusList) {
+        for (int index1=0; index1 < censusList.size() -1; index1++) {
+            for (int index2 = 0; index2 < censusList.size() - index1 - 1; index2++) {
+                E census1 = (E) censusList.get(index2);
+                E census2 = (E) censusList.get(index2+1);
+                if (censuscomparator.compare(census1, census2) > 0){
+                    censusList.set(index2, census2);
+                    censusList.set(index2+1, census1);
                 }
             }
 
