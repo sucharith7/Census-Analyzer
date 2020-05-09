@@ -145,7 +145,7 @@ public class CensusAnalyzerTest {
             stateCensusAnalyzer.loadStateData(CSV_STATE);
             String sortedCensusData = stateCensusAnalyzer.getStateCodeWiseSortedCensusData();
             StateCensus[] censusCSV = new Gson().fromJson(sortedCensusData,StateCensus[].class);
-            Assert.assertEquals("Andhra Pradesh",censusCSV[0].getStateName());
+            Assert.assertEquals("Andaman and Nicobar Islands",censusCSV[0].getStateName());
         }  catch (CensusException exception) { }
     }
 
