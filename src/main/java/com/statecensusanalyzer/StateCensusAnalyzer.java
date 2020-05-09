@@ -3,7 +3,6 @@ package com.statecensusanalyzer;
 import com.census.ICSVBuilder;
 import com.censusdata.CensusData;
 import com.censusexception.CensusException;
-import com.censusexception.CensusException.exceptionType;
 import com.csvbuilderfactory.CSVBuilderFactory;
 import com.google.gson.Gson;
 import com.opencsvbuilder.CSVBuilderException;
@@ -27,14 +26,31 @@ public class StateCensusAnalyzer {
     }
 
     public int loadCensusData(String csvFilePath) throws CensusException {
+        return this.loadStateCensusData(csvFilePath, StateCensus.class);
+    }
 
+    public int loadStateData(String csvFilePath) throws CensusException {
+        return this.loadStateCensusData(csvFilePath, CensusData.class);
+    }
+
+    public <E> int loadStateCensusData(String csvFilePath, Class<E> csvClass) throws CensusException {
         try {
             Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
             ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
-            Iterator<StateCensus> iteratorStateCensus = csvBuilder.getCSVFileIterator(reader,StateCensus.class);
-            Iterable<StateCensus> StateCensusIterable = () -> iteratorStateCensus;
-            StreamSupport.stream(StateCensusIterable.spliterator(),false)
-                    .forEach(censusCsv -> csvStateCensusMap.put(censusCsv.getStateName(), censusCsv));
+            Iterator<E> iteratorCSVCensus = csvBuilder.getCSVFileIterator(reader,csvClass);
+            Iterable<E> StateCensusIterable = () -> iteratorCSVCensus;
+            if (csvClass.getName().equals("com.statecensus.StateCensus")) {
+                StreamSupport.stream(StateCensusIterable.spliterator(), false)
+                        .map(StateCensus.class::cast)
+                        .forEach(censusCsv -> csvStateCensusMap.put(censusCsv.getStateName(), censusCsv));
+                return csvStateCensusMap.size();
+            }
+            if (csvClass.getName().equals("com.censusdata.CensusData")) {
+                StreamSupport.stream(StateCensusIterable.spliterator(), false)
+                        .map(CensusData.class::cast)
+                        .forEach(censusCsv -> csvCensusDataMap.put(censusCsv.getStateName(), censusCsv));
+                return csvCensusDataMap.size();
+            }
         } catch (NoSuchFileException exception) {
             throw new CensusException(CensusException.exceptionType.CENSUS_FILE_ERROR, "please enter proper file path or file type");
         } catch (RuntimeException exception) {
@@ -44,29 +60,7 @@ public class StateCensusAnalyzer {
         } catch (CSVBuilderException exception) {
             exception.printStackTrace();
         }
-        return csvStateCensusMap.size();
-    }
-
-
-    public int loadStateData(String csvFileState) throws CensusException {
-
-        try {
-            Reader reader = Files.newBufferedReader(Paths.get(csvFileState));
-            ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
-            Iterator<CensusData> iteratorCensusData = csvBuilder.getCSVFileIterator(reader,CensusData.class);
-            Iterable<CensusData> CensusDataIterable = () -> iteratorCensusData;
-            StreamSupport.stream(CensusDataIterable.spliterator(),false)
-                    .forEach(censusCsv -> csvCensusDataMap.put(censusCsv.getStateName(), censusCsv));
-        } catch (NoSuchFileException exception) {
-            throw new CensusException(exceptionType.CENSUS_FILE_ERROR, "please enter proper file path or file type");
-        } catch (RuntimeException exception) {
-            throw new CensusException(exceptionType.OTHER_FILE_ERROR, "please enter proper delimeter or proper header");
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        } catch (CSVBuilderException exception) {
-            exception.printStackTrace();
-        }
-        return csvCensusDataMap.size();
+        return 0;
     }
 
     public String getStateWiseSortedCensusData() throws CensusException{
