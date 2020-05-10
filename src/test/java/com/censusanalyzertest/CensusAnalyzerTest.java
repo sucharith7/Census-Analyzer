@@ -171,6 +171,22 @@ public class CensusAnalyzerTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void givenIndianCensusData_WhenSortedByArea_ShouldReturnLargestAndSmallestState(){
+        try {
+            StateCensusAnalyzer statecensusAnalyzer = new StateCensusAnalyzer();
+            statecensusAnalyzer.loadCensusData(CSV_FILE);
+            String mostPopulous = statecensusAnalyzer.getStateWiseLargestAndSmallestState();
+            StateCensusDAO censusCSV[] = new Gson().fromJson(mostPopulous, StateCensusDAO[].class);
+            Assert.assertEquals(342239, censusCSV[censusCSV.length - 1].areaInSqKm);
+            Assert.assertEquals("Rajasthan",censusCSV[censusCSV.length - 1].state);
+            Assert.assertEquals(3702, censusCSV[censusCSV.length - 28].areaInSqKm);
+            Assert.assertEquals("Goa", censusCSV[censusCSV.length - 28].state);
+        } catch (CensusException e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 
