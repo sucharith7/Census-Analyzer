@@ -145,6 +145,19 @@ public class CensusAnalyzerTest {
         }  catch (CensusException exception) { }
     }
 
+    @Test
+    public void givenIndianCensusData_WhenSortedOnStatePopulation_ShouldReturnMostPopulous(){
+        try {
+            StateCensusAnalyzer statecensusAnalyzer = new StateCensusAnalyzer();
+            statecensusAnalyzer.loadCensusData(CSV_FILE);
+            String mostPopulous = statecensusAnalyzer.getStateWiseMostPopulousState();
+            StateCensusDAO censusCSV[] = new Gson().fromJson(String.valueOf(mostPopulous), StateCensusDAO[].class);
+            Assert.assertEquals(199812341,censusCSV[censusCSV.length-1].population);
+        } catch (CensusException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
 
