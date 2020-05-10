@@ -158,6 +158,19 @@ public class CensusAnalyzerTest {
         }
     }
 
+    @Test
+    public void givenIndianCensusData_WhenSortedOnDensity_ShouldReturnMostPopulationDensity() {
+        try {
+            StateCensusAnalyzer stateCensusAnalyzer = new StateCensusAnalyzer();
+            stateCensusAnalyzer.loadCensusData(CSV_FILE);
+            String mostPopulous = stateCensusAnalyzer.getStateWiseMostPopulationDensityState();
+            StateCensusDAO censusCSV[] = new Gson().fromJson(mostPopulous, StateCensusDAO[].class);
+            Assert.assertEquals(1102, censusCSV[censusCSV.length - 1].densityPerSqKm);
+            Assert.assertEquals("Bihar",censusCSV[censusCSV.length - 1].state);
+        } catch (CensusException e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 
