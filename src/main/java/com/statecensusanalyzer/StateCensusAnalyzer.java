@@ -76,6 +76,16 @@ public class StateCensusAnalyzer {
             return new Gson().toJson(sortedList);
         }
 
+    public String getStateWiseMostPopulousState() throws CensusException {
+        if(csvStateCensusMap == null || csvStateCensusMap.size() == 0){
+            throw new CensusException(CensusException.exceptionType.NO_CENSUS_DATA,"No Census Data");
+        }
+        Comparator<StateCensusDAO> censusComparator = Comparator.comparing(census -> census.population);
+        List<StateCensusDAO> sortedStateCode = this.sort(censusComparator, new ArrayList<>(csvStateCensusMap.values()));
+        String sortedStateCodeJson = new Gson().toJson(sortedStateCode);
+        return sortedStateCodeJson;
+    }
+
         private <E > List < E > sort(Comparator < E > comparator, List < E > censusList) {
             for (int index1 = 0; index1 < censusList.size() - 1; index1++) {
                 for (int index2 = 0; index2 < censusList.size() - index1 - 1; index2++) {
