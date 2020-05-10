@@ -4,13 +4,13 @@ import com.opencsv.bean.CsvBindByName;
 
 public class CensusData {
     @CsvBindByName(column = "SrNo",required = true)
-    private String srNo;
+    private int srNo;
 
     @CsvBindByName(column = "StateName",required = true)
     private String stateName;
 
     @CsvBindByName(column = "TIN",required = true)
-    private String tin;
+    private int tin;
 
     @CsvBindByName(column = "StateCode",required = true)
     private String stateCode;
@@ -19,11 +19,11 @@ public class CensusData {
 
     }
 
-    public String getSrNo() {
+    public int getSrNo() {
         return srNo;
     }
 
-    public void setSrNo(String srNo) {
+    public void setSrNo(int srNo) {
         this.srNo = srNo;
     }
 
@@ -35,11 +35,11 @@ public class CensusData {
         this.stateName = stateName;
     }
 
-    public String getTIN() {
+    public int getTIN() {
         return tin;
     }
 
-    public void setTIN(String tin) {
+    public void setTIN(int tin) {
         this.tin = tin;
     }
 
