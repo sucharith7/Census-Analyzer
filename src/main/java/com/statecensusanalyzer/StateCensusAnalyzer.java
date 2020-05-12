@@ -24,8 +24,9 @@ public class StateCensusAnalyzer {
         return this.loadStateCodeData(csvFilePath, StateCensus.class);
     }
 
-    public int loadStateData(String csvFilePath) throws CensusException {
-        return this.loadStateCodeData(csvFilePath,CensusData.class);
+    public int loadStateData(String censusPath, String stateCodePath) throws CensusException {
+        this.loadStateCodeData(censusPath,StateCensus.class);
+        return this.loadStateCodeData(stateCodePath,CensusData.class);
     }
 
     public <E> int loadStateCodeData(String csvFilePath, Class<E> csvClass) throws CensusException {
